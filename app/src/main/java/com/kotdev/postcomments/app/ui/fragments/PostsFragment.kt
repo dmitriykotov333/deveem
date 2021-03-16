@@ -8,8 +8,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.kotdev.postcomments.app.ui.adapters.HeaderAdapter
 import com.kotdev.postcomments.app.ui.adapters.PostRecyclerAdapter
 import com.kotdev.postcomments.app.viewmodels.PostsViewModel
 import com.kotdev.postcomments.app.viewmodels.ViewModelProviderFactory
@@ -17,6 +19,7 @@ import com.kotdev.postcomments.databinding.FragmentPostsBinding
 import com.kotdev.postcomments.helpers.Resource
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
+
 
 class PostsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
 
@@ -26,6 +29,12 @@ class PostsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private lateinit var binding: FragmentPostsBinding
+
+    @Inject
+    lateinit var concatAdapter: ConcatAdapter
+
+    @Inject
+    lateinit var headerAdapter: HeaderAdapter
 
     @Inject
     lateinit var adapter: PostRecyclerAdapter
@@ -74,12 +83,7 @@ class PostsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        binding.recyclerView.adapter = adapter
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.detach()
+        binding.recyclerView.adapter = concatAdapter
     }
 
     override fun onRefresh() {
