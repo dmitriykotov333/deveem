@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kotdev.postcomments.R
 import com.kotdev.postcomments.app.models.Comments
 import com.kotdev.postcomments.app.ui.adapters.CommentsRecyclerAdapter
+import com.kotdev.postcomments.app.ui.adapters.HeaderAdapter
 import com.kotdev.postcomments.app.viewmodels.CommentsViewModel
 import com.kotdev.postcomments.app.viewmodels.ViewModelProviderFactory
 import com.kotdev.postcomments.databinding.FragmentCommentsPostBinding
@@ -17,6 +19,8 @@ import com.kotdev.postcomments.helpers.Click
 import com.kotdev.postcomments.helpers.Resource
 import dagger.android.support.DaggerFragment
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -28,8 +32,6 @@ class CommentsPostFragment : DaggerFragment(), Click, SwipeRefreshLayout.OnRefre
     }
 
     private lateinit var binding: FragmentCommentsPostBinding
-
-    private lateinit var disposable: Disposable
 
     @Inject
     lateinit var adapter: CommentsRecyclerAdapter
@@ -77,6 +79,7 @@ class CommentsPostFragment : DaggerFragment(), Click, SwipeRefreshLayout.OnRefre
 
     private fun subscribeObserversComments() {
         Log.d(TAG, "subscribeObservers")
+        viewModel.observeComments(requireArguments().getInt("id")).removeObservers(viewLifecycleOwner)
         viewModel.observeComments(requireArguments().getInt("id")).observe(viewLifecycleOwner, {
             if (it != null) {
                 when (it) {
@@ -100,29 +103,15 @@ class CommentsPostFragment : DaggerFragment(), Click, SwipeRefreshLayout.OnRefre
 
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayoutManager.VERTICAL
-            )
-        )
         binding.recyclerView.adapter = adapter
-
     }
 
     override fun add(comment: Comments) {
-        disposable = viewModel.addComment(comment).subscribe {
-            adapter.addComment(it.data!!)
-            requireActivity().runOnUiThread {
-                binding.bar.visibility = View.GONE
-                binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
-            }
-        }!!
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        disposable.dispose()
+       viewModel.addComment(comment).observe(viewLifecycleOwner, {
+           adapter.addComment(it.data!!)
+               binding.bar.visibility = View.GONE
+               binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
+       })
     }
 
     override fun onRefresh() {
