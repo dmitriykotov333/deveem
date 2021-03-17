@@ -2,6 +2,7 @@ package com.kotdev.postcomments.app.ui.activies
 
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,9 +10,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.kotdev.postcomments.R
 import com.kotdev.postcomments.databinding.ActivityMainBinding
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class MainActivity : DaggerAppCompatActivity() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

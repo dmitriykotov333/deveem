@@ -7,33 +7,37 @@ import com.kotdev.postcomments.app.ui.adapters.HeaderAdapter
 import com.kotdev.postcomments.app.ui.adapters.PostRecyclerAdapter
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
+@InstallIn(FragmentComponent::class)
 @Module
 class MainModule {
 
-    @MainScope
-    @Provides
-    fun provideMainApi(retrofit: Retrofit): MainApi {
-        return retrofit.create(MainApi::class.java)
-    }
-
-    @MainScope
+    @FragmentScoped
     @Provides
     fun provideAdapter() = PostRecyclerAdapter()
 
-    @MainScope
+    @FragmentScoped
     @Provides
     fun provideHeaderAdapter() = HeaderAdapter()
 
-    @MainScope
+    @FragmentScoped
     @Provides
     fun provideConcatAdapter(headerAdapter: HeaderAdapter, postRecyclerAdapter: PostRecyclerAdapter): ConcatAdapter {
         return ConcatAdapter(headerAdapter, postRecyclerAdapter)
     }
 
-    @MainScope
+    @FragmentScoped
     @Provides
     fun provideCommentsRecyclerAdapter() = CommentsRecyclerAdapter()
 }

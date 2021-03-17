@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,14 +15,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kotdev.postcomments.app.ui.adapters.HeaderAdapter
 import com.kotdev.postcomments.app.ui.adapters.PostRecyclerAdapter
 import com.kotdev.postcomments.app.viewmodels.PostsViewModel
-import com.kotdev.postcomments.app.viewmodels.ViewModelProviderFactory
 import com.kotdev.postcomments.databinding.FragmentPostsBinding
 import com.kotdev.postcomments.helpers.Resource
 import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
-class PostsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
+@AndroidEntryPoint
+class PostsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     companion object {
@@ -39,10 +40,7 @@ class PostsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     @Inject
     lateinit var adapter: PostRecyclerAdapter
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    private val viewModel: PostsViewModel by viewModels { viewModelProviderFactory }
+    private val viewModel: PostsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

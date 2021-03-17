@@ -2,8 +2,12 @@ package com.kotdev.postcomments.app.di
 
 import android.app.Application
 import android.content.Context
+import com.kotdev.postcomments.app.network.MainApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -11,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-
+@InstallIn(SingletonComponent::class)
 @Module
 class AppModule {
 
@@ -39,7 +43,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideContext(application: Application): Context {
-        return application.applicationContext
+    fun provideMainApi(retrofit: Retrofit): MainApi {
+        return retrofit.create(MainApi::class.java)
     }
 }

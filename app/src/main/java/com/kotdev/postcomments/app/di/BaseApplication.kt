@@ -1,10 +1,9 @@
 package com.kotdev.postcomments.app.di
 
+import android.app.Application
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import dagger.hilt.android.HiltAndroidApp
 
-class BaseApplication : DaggerApplication() {
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder().application(this).build()
-    }
-}
+@HiltAndroidApp
+class BaseApplication : Application()

@@ -4,9 +4,11 @@ import androidx.lifecycle.*
 import com.kotdev.postcomments.app.models.Comments
 import com.kotdev.postcomments.app.network.MainApi
 import com.kotdev.postcomments.helpers.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
+@HiltViewModel
 class CommentsViewModel @Inject constructor(private val mainApi: MainApi) : ViewModel() {
 
     fun addComment(comment: Comments) = liveData(Dispatchers.IO) {

@@ -3,28 +3,23 @@ package com.kotdev.postcomments.app.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kotdev.postcomments.R
 import com.kotdev.postcomments.app.models.Comments
 import com.kotdev.postcomments.app.ui.adapters.CommentsRecyclerAdapter
-import com.kotdev.postcomments.app.ui.adapters.HeaderAdapter
 import com.kotdev.postcomments.app.viewmodels.CommentsViewModel
-import com.kotdev.postcomments.app.viewmodels.ViewModelProviderFactory
 import com.kotdev.postcomments.databinding.FragmentCommentsPostBinding
 import com.kotdev.postcomments.helpers.Click
 import com.kotdev.postcomments.helpers.Resource
 import dagger.android.support.DaggerFragment
-import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
-class CommentsPostFragment : DaggerFragment(), Click, SwipeRefreshLayout.OnRefreshListener {
+@AndroidEntryPoint
+class CommentsPostFragment : Fragment(), Click, SwipeRefreshLayout.OnRefreshListener {
 
 
     companion object {
@@ -36,10 +31,7 @@ class CommentsPostFragment : DaggerFragment(), Click, SwipeRefreshLayout.OnRefre
     @Inject
     lateinit var adapter: CommentsRecyclerAdapter
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    private val viewModel: CommentsViewModel by viewModels { viewModelProviderFactory }
+    private val viewModel: CommentsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
